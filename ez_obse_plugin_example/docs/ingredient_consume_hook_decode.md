@@ -696,6 +696,7 @@ Object vertex-shader pass:
 - Build 83 responds to reports that Blind could make water disappear. Blind no longer opts into texture-backed depth capture and `BlindPS` no longer samples `DepthSampler`; its distance/softness cue is now screen-space only. This avoids touching the water/refraction-sensitive depth acquisition path for Blind while preserving the command-driven image-space effect. Blind profiles now require the current standalone `VESBlindPS.pso` so older combined/embedded fallback bytecode cannot reintroduce the stale depth-sampling Blind path.
 - Build 84 corrects runtime pipeline diagnostics to match the Build 80 support-buffer policy. `VESDumpShaderRenderer` no longer labels SimpleShadow, DepthMap, RenderNormals, LocalMap, or ZOnly vertex/pixel/pass readiness as clone candidates. Those decoded families now report `blocked:preserveNativeSupportBuffers` or `blocked:clearSupportPass`, and pipeline coverage reports observed support-buffer draws as `supportPreserved`. This does not add support-buffer replacement or new masking semantics.
 - Build 85 responds to crashes reported when invoking `VESDimPurple` and `VESDimDarkRed`. The shader/profile path for those commands was already the shared Dim profile-family path, so the implementation targets the command-table risk that remained from the public release: the plugin no longer uses OBSE's default development opcode base `0x2000`. This reduces opcode collision risk with other plugins while preserving the same Dim shader semantics.
+- Build 86 replaces the temporary hotfix opcode base with the local Daggers opcode ledger allocation. `VisualEffectShaders.dll` now starts at `0x70F0`, and the ledger assigns the full current command range through `0x7111` in OBSE `RegisterCommand` order. `VESDimPurple` is registered at `0x7103`; `VESDimDarkRed` is registered at `0x7104`.
 
 Decode confidence status:
 
@@ -712,7 +713,7 @@ Decode confidence status:
 
 Do not express this section as a percentage. No quantitative coverage method is currently documented.
 
-Build 85 moved the current opcode base off the private template value `0x2000` to reduce command-table collision risk. A public release should still request an assigned OBSE opcode range and update `kOpcodeBase` once an official range is available.
+Build 86 records the current VES opcode range in the local Daggers opcode ledger: `0x70F0-0x7111`. A public release should still request an assigned OBSE opcode range if this local ledger is not the final distribution authority.
 
 Built package output:
 

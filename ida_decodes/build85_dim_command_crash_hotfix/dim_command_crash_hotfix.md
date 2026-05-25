@@ -12,7 +12,7 @@ Scope: crash report for `VESDimPurple` and `VESDimDarkRed`.
 
 The remaining public-release hazard was command registration. The plugin still used OBSE's default development opcode base `0x2000`, which OBSE documents as unsuitable for released plugins because multiple plugins using that base can collide in the command table.
 
-Build 85 changes the local VES opcode base from `0x2000` to `0x7B00`. This does not change shader semantics, hook addresses, profile IDs, or command names. It only moves the registered command opcodes away from the development default to reduce collision risk.
+Build 85 initially moved the local VES opcode base away from `0x2000`. Build 86 supersedes the temporary value and registers VES in the local Daggers opcode ledger at `0x70F0-0x7111`. This does not change shader semantics, hook addresses, profile IDs, or command names. It only moves the registered command opcodes away from the development default to reduce collision risk.
 
 ## Remaining validation
 
@@ -25,4 +25,3 @@ VESDimDarkRed
 VESStop
 VESDumpShaderRenderer
 ```
-
