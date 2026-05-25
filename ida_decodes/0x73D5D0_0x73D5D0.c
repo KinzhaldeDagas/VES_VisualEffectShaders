@@ -1,0 +1,5 @@
+// 0x73D5D0 @ 0x73D5D0
+signed int sub_73D5D0()
+{
+  return 0xC; /*0x73d5d5*/
+}

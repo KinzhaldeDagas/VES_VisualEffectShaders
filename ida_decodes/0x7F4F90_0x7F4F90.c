@@ -1,0 +1,5 @@
+// 0x7F4F90 @ 0x7F4F90
+signed int sub_7F4F90()
+{
+  return 0xA; /*0x7f4f95*/
+}

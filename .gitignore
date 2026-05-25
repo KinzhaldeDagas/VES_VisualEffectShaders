@@ -1,0 +1,17 @@
+# Visual Studio / local build output
+.vs/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+*.ipch
+ez_obse_plugin_example/Builds/
+
+# Generated deployable artifacts
+package/
+out/
+release/
+
+# Local editor / OS noise
+.DS_Store
+Thumbs.db

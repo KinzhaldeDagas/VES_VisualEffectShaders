@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\src\shademe\OBSE-Plugins;C:\src\shademe\OBSE-Plugins\obse;C:\src\shademe\OBSE-Plugins\obse\obse;C:\src\shademe\OBSE-Plugins\obse\obse_common;C:\src\shademe\OBSE-Plugins\obse_plugins\plugins_common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,54 @@
+scn EzObsePluginExampleQuestScript
+
+short bInit = 0 ; reset every time the game loads?
+
+Begin GameMode
+
+    ; Check if the quest has started (and only run once)
+    if bInit == 0
+		
+		PrintC "EzObsePluginExampleQuest : Begin GameMode"
+		
+		
+		if (PluginExampleFunctionsTest)
+			PrintC "PluginExampleFunctionsTest : Test()"
+		endif
+		
+		
+        ; Mark the quest as started to prevent re-execution
+		set bInit to 1
+
+		PrintC "EzObsePluginExampleQuest : End GameMode"
+		
+    endif
+
+End
+
+
+====================================================
+====================================================
+scn EzObsePluginExampleQuestScript
+
+short bInit = 0 ; reset every time the game loads?
+
+Begin GameMode
+
+    ; Check if the quest has started (and only run once)
+    if bInit == 0
+		
+		PrintC "EzFosePluginExampleQuest : Begin GameMode"
+		
+		
+		;if (PluginExampleFunctionsTest)
+		;	PrintC "PluginExampleFunctionsTest : Test()"
+		;endif
+		
+		
+        ; Mark the quest as started to prevent re-execution
+		set bInit to 1
+
+		PrintC "EzFosePluginExampleQuest : End GameMode"
+		
+    endif
+
+End

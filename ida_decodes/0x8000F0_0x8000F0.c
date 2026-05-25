@@ -1,0 +1,6 @@
+// 0x8000F0 @ 0x8000F0
+int __thiscall sub_8000F0(void *this)
+{
+  (*(void (__thiscall **)(void *))(*(_DWORD *)this + 0xB0))(this); /*0x8000fb*/
+  return (*(int (__thiscall **)(void *))(*(_DWORD *)this + 0xB8))(this);
+}

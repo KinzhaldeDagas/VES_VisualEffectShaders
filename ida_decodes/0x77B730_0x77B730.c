@@ -1,0 +1,6 @@
+// 0x77B730 @ 0x77B730
+int __thiscall sub_77B730(void *this)
+{
+  (*(void (__thiscall **)(void *))(*(_DWORD *)this + 0xA0))(this); /*0x77b73b*/
+  return (*(int (__thiscall **)(void *))(*(_DWORD *)this + 0xB0))(this);
+}

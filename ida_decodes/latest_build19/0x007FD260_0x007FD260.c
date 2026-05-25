@@ -1,0 +1,157 @@
+// 0x007FD260 @ 0x007FD260
+// MoonSugarEffect decode: native shader-id selector for higher/special IDs such as 0x154/0x155 and refraction/special offscreen IDs. Not a generic plugin mask allocator.
+char __cdecl sub_7FD260(unsigned __int16 a1)
+{
+  int *shader; // esi
+  unsigned __int16 v2; // bx
+  int v3; // edi
+  void (__stdcall *v4)(volatile LONG *); // ebx
+  LONG (__stdcall *v5)(volatile LONG *); // ebp
+  int v6; // eax
+  int v7; // edi
+  int v8; // eax
+  int v9; // edx
+  int v10; // esi
+  int v11; // edi
+  int v12; // eax
+  int v13; // ebp
+  int v14; // ebp
+  int v15; // ebp
+  int v16; // edi
+  int i; // eax
+  int v18; // esi
+  int v20; // esi
+  int v21; // esi
+
+  shader = (int *)GetShaderDefinition(0x1Au)->shader; /*0x7fd26c*/
+  if ( shader && (v2 = a1, (unsigned __int16)(a1 - 0x15E) <= 1u) ) /*0x7fd287*/
+  {
+    sub_55E2A0(shader + 0xB, shader + 0x1F); /*0x7fd290*/
+    sub_55E2A0(shader + 0xC, shader + 0x20); /*0x7fd29f*/
+  }
+  else
+  {
+    v3 = shader[0xB]; /*0x7fd2a9*/
+    v4 = (void (__stdcall *)(volatile LONG *))InterlockedIncrement; /*0x7fd2b2*/
+    v5 = InterlockedDecrement; /*0x7fd2b8*/
+    if ( v3 != shader[0x21] ) /*0x7fd2be*/
+    {
+      if ( v3 ) /*0x7fd2c2*/
+      {
+        if ( !v5((volatile LONG *)(v3 + 4)) ) /*0x7fd2c8*/
+          (**(void (__thiscall ***)(int, int))v3)(v3, 1); /*0x7fd2da*/
+      }
+      v6 = shader[0x21]; /*0x7fd2dc*/
+      shader[0xB] = v6; /*0x7fd2e4*/
+      if ( v6 ) /*0x7fd2e7*/
+        v4((volatile LONG *)(v6 + 4)); /*0x7fd2ed*/
+    }
+    v7 = shader[0xC]; /*0x7fd2ef*/
+    if ( v7 != shader[0x22] ) /*0x7fd2f8*/
+    {
+      if ( v7 ) /*0x7fd2fc*/
+      {
+        if ( !v5((volatile LONG *)(v7 + 4)) ) /*0x7fd302*/
+          (**(void (__thiscall ***)(int, int))v7)(v7, 1); /*0x7fd314*/
+      }
+      v8 = shader[0x22]; /*0x7fd316*/
+      shader[0xC] = v8; /*0x7fd31e*/
+      if ( v8 ) /*0x7fd321*/
+        v4((volatile LONG *)(v8 + 4)); /*0x7fd327*/
+    }
+    v2 = a1; /*0x7fd329*/
+  }
+  if ( v2 == 4 ) /*0x7fd331*/
+  {
+    v9 = 1; /*0x7fd333*/
+  }
+  else if ( v2 == 5 ) /*0x7fd33e*/
+  {
+    v9 = 2; /*0x7fd340*/
+  }
+  else
+  {
+    v9 = v2 - 0x12A; /*0x7fd34a*/
+  }
+  v10 = 1; /*0x7fd350*/
+  v11 = 0; /*0x7fd35a*/
+  v12 = 2; /*0x7fd35e*/
+  do /*0x7fd445*/
+  {
+    if ( v11 >= 5 ) /*0x7fd36a*/
+    {
+      *((_BYTE *)&dword_B46964 + 0xFFFFFFFF + v10) = ((1 << v10) & *(_DWORD *)(4 * v9 + 0xB46988)) != 0; /*0x7fd3aa*/
+    }
+    else
+    {
+      v13 = *(_DWORD *)(4 * v11 + 0xB46B98); /*0x7fd36c*/
+      if ( v13 ) /*0x7fd375*/
+      {
+        v2 = a1; /*0x7fd387*/
+        *(_BYTE *)(v13 + 8) = ((1 << v10) & *(_DWORD *)(4 * v9 + 0xB46988)) != 0; /*0x7fd38e*/
+      }
+    }
+    if ( v10 >= 5 ) /*0x7fd3b0*/
+    {
+      *((_BYTE *)&dword_B46964 + v10) = ((1 << v12) & *(_DWORD *)(4 * v9 + 0xB46988)) != 0; /*0x7fd3ec*/
+    }
+    else
+    {
+      v14 = *(_DWORD *)(4 * v11 + 0xB46B9C); /*0x7fd3b2*/
+      if ( v14 ) /*0x7fd3bb*/
+      {
+        v2 = a1; /*0x7fd3cd*/
+        *(_BYTE *)(v14 + 8) = ((1 << v12) & *(_DWORD *)(4 * v9 + 0xB46988)) != 0; /*0x7fd3d4*/
+      }
+    }
+    if ( v12 >= 5 ) /*0x7fd3f5*/
+    {
+      *((_BYTE *)&dword_B46964 + v12) = ((1 << (v12 + 1)) & *(_DWORD *)(4 * v9 + 0xB46988)) != 0; /*0x7fd433*/
+    }
+    else
+    {
+      v15 = *(_DWORD *)(4 * v11 + 0xB46BA0); /*0x7fd3f7*/
+      if ( v15 ) /*0x7fd400*/
+      {
+        v2 = a1; /*0x7fd413*/
+        *(_BYTE *)(v15 + 8) = ((1 << (v12 + 1)) & *(_DWORD *)(4 * v9 + 0xB46988)) != 0; /*0x7fd41a*/
+      }
+    }
+    v11 += 3; /*0x7fd439*/
+    v10 += 3; /*0x7fd43c*/
+    v12 += 3; /*0x7fd43f*/
+  }
+  while ( v11 < 0x21 ); /*0x7fd445*/
+  v16 = *(_DWORD *)(4 * v9 + 0xB46A60); /*0x7fd44b*/
+  for ( i = 0; i < 0x31; ++i ) /*0x7fd457*/
+    byte_B46930[i] = ((1 << (i + 1)) & v16) != 0; /*0x7fd473*/
+  word_B46935 = 0x101; /*0x7fd48a*/
+  byte_B46937 = 1; /*0x7fd490*/
+  LOWORD(dword_B46974) = 0x101; /*0x7fd495*/
+  BYTE2(dword_B46974) = 1; /*0x7fd49b*/
+  if ( v2 == 4 || v2 == 5 ) /*0x7fd4aa*/
+  {
+    v21 = *(_DWORD *)(4 * v9 + 0xB473D0); /*0x7fd532*/
+  }
+  else
+  {
+    if ( (unsigned __int16)(v2 - 0x156) <= 7u ) /*0x7fd4ba*/
+    {
+      v18 = *(_DWORD *)(4 * v2 + 0xB46F28); /*0x7fd4bf*/
+      if ( !*(_DWORD *)(v18 + 0x30) ) /*0x7fd4c6*/
+        *(_DWORD *)(v18 + 0x30) = sub_772DF0(); /*0x7fd4d1*/
+      return sub_772CD0(*(_DWORD **)(v18 + 0x30), 0xA8, 0xF, 0); /*0x7fd4ea*/
+    }
+    if ( (unsigned __int16)(v2 - 0x12B) <= 0x34u ) /*0x7fd4f5*/
+    {
+      v20 = *(_DWORD *)(4 * v2 + 0xB46F28); /*0x7fd4fa*/
+      if ( !*(_DWORD *)(v20 + 0x30) ) /*0x7fd501*/
+        *(_DWORD *)(v20 + 0x30) = sub_772DF0(); /*0x7fd50c*/
+      return sub_772CD0(*(_DWORD **)(v20 + 0x30), 0xA8, 7, 0); /*0x7fd525*/
+    }
+    v21 = *(_DWORD *)(4 * v2 + 0xB46F28); /*0x7fd529*/
+  }
+  if ( !*(_DWORD *)(v21 + 0x30) ) /*0x7fd539*/
+    *(_DWORD *)(v21 + 0x30) = sub_772DF0(); /*0x7fd544*/
+  return sub_772CD0(*(_DWORD **)(v21 + 0x30), 0xA8, 0, 0); /*0x7fd4e5*/
+}
