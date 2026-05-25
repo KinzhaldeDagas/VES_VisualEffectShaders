@@ -65,7 +65,7 @@ Do not express current decode or implementation completion as a percentage. No c
 
 | Pipeline area | Current status | Remaining gap |
 | --- | --- | --- |
-| Command-driven screen effects | Implemented through explicit OBSE commands and profile-family pixel shader slots. | Runtime confirmation that each packaged `.pso` slot is loaded and active for representative commands. |
+| Command-driven screen effects | Implemented through explicit OBSE commands and profile-family pixel shader slots. Build 85 moves the plugin off OBSE's default development opcode base to reduce public command-table collision risk. | Runtime confirmation that each packaged `.pso` slot is loaded and active for representative commands. |
 | Image-space render path | Implemented for the byte-validated `NiRendererRender_ImageSpaceProcessCall` path. Profile-family `.pso` files are the normal shipped path; `VESDistortion.pso` / embedded bytecode are compatibility fallback only. | Menu, render-to-texture, reset, and unusual render-mode validation. |
 | Depth-backed screen masking | Implemented as a texture-backed depth capture/bind path where supported by the device/format. | It is not a true terrain/object ID mask; formats and runtime availability must be logged per machine. |
 | World/object vertex replacement | Implemented as exact-gated non-skinned and skinned post-setup replacement for decoded visible families. | Runtime matrix for actor, creature, armor, first-person, third-person, and heavy modded scenes. |

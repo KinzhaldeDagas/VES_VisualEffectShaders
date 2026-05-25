@@ -695,6 +695,7 @@ Object vertex-shader pass:
 - Build 82 adds Dim color variants without changing the decoded image-space path. `VESDim100` now applies the Dim darkness terms at 135% of the previous full-strength value, while `VESDimWhiteInverted`, `VESDimPurple`, and `VESDimDarkRed` reuse the Dim profile-family shader with a profile-variant constant. All Dim profiles require the current standalone `VESDimPS.pso` so stale combined fallback bytecode cannot render the new variants as plain Dim. The fidelity pass also regenerated all standalone profile-family pixel shaders from the current `VESDistortion.fx` source; `VESDistortion.pso` remains compatibility fallback only.
 - Build 83 responds to reports that Blind could make water disappear. Blind no longer opts into texture-backed depth capture and `BlindPS` no longer samples `DepthSampler`; its distance/softness cue is now screen-space only. This avoids touching the water/refraction-sensitive depth acquisition path for Blind while preserving the command-driven image-space effect. Blind profiles now require the current standalone `VESBlindPS.pso` so older combined/embedded fallback bytecode cannot reintroduce the stale depth-sampling Blind path.
 - Build 84 corrects runtime pipeline diagnostics to match the Build 80 support-buffer policy. `VESDumpShaderRenderer` no longer labels SimpleShadow, DepthMap, RenderNormals, LocalMap, or ZOnly vertex/pixel/pass readiness as clone candidates. Those decoded families now report `blocked:preserveNativeSupportBuffers` or `blocked:clearSupportPass`, and pipeline coverage reports observed support-buffer draws as `supportPreserved`. This does not add support-buffer replacement or new masking semantics.
+- Build 85 responds to crashes reported when invoking `VESDimPurple` and `VESDimDarkRed`. The shader/profile path for those commands was already the shared Dim profile-family path, so the implementation targets the command-table risk that remained from the public release: the plugin no longer uses OBSE's default development opcode base `0x2000`. This reduces opcode collision risk with other plugins while preserving the same Dim shader semantics.
 
 Decode confidence status:
 
@@ -711,7 +712,7 @@ Decode confidence status:
 
 Do not express this section as a percentage. No quantitative coverage method is currently documented.
 
-The current opcode base is the private template value `0x2000`. That is acceptable for local testing, but a public release should request an assigned OBSE opcode range and update `kOpcodeBase`.
+Build 85 moved the current opcode base off the private template value `0x2000` to reduce command-table collision risk. A public release should still request an assigned OBSE opcode range and update `kOpcodeBase` once an official range is available.
 
 Built package output:
 

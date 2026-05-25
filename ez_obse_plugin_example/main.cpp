@@ -181,7 +181,7 @@ namespace
 	const UInt32 kDepthCaptureMaxAgeMs = 50;
 	const UInt32 kMagicItemOffsetInObject = 0x24;
 	const UInt32 kEngineMagicTypeIngredient = 8;
-	const UInt32 kOpcodeBase = 0x2000;
+	const UInt32 kOpcodeBase = 0x7B00;
 	const UInt32 kRenderModeNormal = 0;
 	const UInt32 kRenderModeAddress = 0x00B42EAC;
 	const UInt32 kRenderTargetStackDepthAddress = 0x00B45D74;
