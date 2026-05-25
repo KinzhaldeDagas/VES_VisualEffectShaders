@@ -698,6 +698,7 @@ Object vertex-shader pass:
 - Build 85 responds to crashes reported when invoking `VESDimPurple` and `VESDimDarkRed`. The shader/profile path for those commands was already the shared Dim profile-family path, so the implementation addresses a confirmed public-release command-table risk: the plugin no longer uses OBSE's default development opcode base `0x2000`. This reduces opcode collision risk with other plugins while preserving the same Dim shader semantics, but it is not proof that opcode collision caused the Dim variant crash.
 - Build 86 replaces the temporary hotfix opcode base with the local Daggers opcode ledger allocation. `VisualEffectShaders.dll` now starts at `0x70F0`, and the ledger assigns the full current command range through `0x7111` in OBSE `RegisterCommand` order. `VESDimPurple` is registered at `0x7103`; `VESDimDarkRed` is registered at `0x7104`.
 - Build 87 follows up on a later report that `VESDimWhiteInverted`, `VESDimPurple`, and `VESDimDarkRed` all still crash. The correction keeps the public commands and Dim variant constants, but canonicalizes the active renderer profile for those three commands to `VESDim100`. This matches the Build 82 evidence that the variants are selected inside the Dim profile-family shader by `MoonSugarProfile.w`; no decoded evidence currently requires independent runtime renderer profiles for the color variants.
+- Build 88 responds to visual feedback that the Dim color variants looked like colored Blind. The implementation did not route them through `BlindPS`, but `DimPS` used radial vignette/luma-heavy color replacement that could read as Blind-style peripheral occlusion. `DimPS` now keeps the color variants as a uniform single-sample dim/tint path with no Blind blur, ghosting, distance cue, or radial falloff.
 
 Decode confidence status:
 
@@ -717,6 +718,8 @@ Do not express this section as a percentage. No quantitative coverage method is 
 Build 86 records the current VES opcode range in the local Daggers opcode ledger: `0x70F0-0x7111`. A public release should still request an assigned OBSE opcode range if this local ledger is not the final distribution authority.
 
 Build 87 keeps that opcode range unchanged. The Dim color-variant crash investigation now treats Build 85 / 86 as command-registration risk reduction only and treats the active-profile canonicalization as the current plugin-side crash mitigation. Runtime validation is still required before claiming the exact crash mechanism is confirmed.
+
+Build 88 keeps the command and opcode surface unchanged. It only changes the current standalone `VESDimPS.pso` and matching source/fallback HLSL for Dim color-variant presentation. The combined `VESDistortion.pso` remains a compatibility fallback and is not the current required path for Dim variants.
 
 Built package output:
 

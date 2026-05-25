@@ -23,3 +23,4 @@ This pass updates the existing command-driven Dim image-space profile and adds D
 - Runtime validation should confirm `VESDumpShaderRenderer` reports the Dim profile shader slot loaded when running the new commands.
 - The new color variants are screen-space color treatments only. They do not imply object material changes, scene lighting changes, or native image-space shader insertion.
 - Build 87 runtime-state correction keeps the public color command names but uses `VESDim100` as the active renderer profile for the three color variants, with the color selector still supplied through `MoonSugarProfile.w`.
+- Build 88 visual correction removes the Dim variant radial/luma-heavy presentation that could make the variants resemble colored Blind. The variants remain uniform Dim-family color treatments.

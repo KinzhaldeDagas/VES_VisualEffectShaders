@@ -223,40 +223,36 @@ float4 DimPS(float2 uv)
     float variant = MoonSugarProfile.w;
     float dimBoost = (variant > 0.5) ? 1.35 : 1.0;
     float3 scene = MoonSugarSceneSample(uv);
-    float2 localUv = MoonSugarLocalUV(uv);
-    float2 p = localUv - 0.5;
-    p.x *= MoonSugarScreen.z / max(MoonSugarScreen.w, 1.0);
-    float radius = length(p);
-    float vignette = smoothstep(0.56, 1.08, radius);
     float luma = MoonSugarLuma(scene);
-    float desat = saturate(dim * 0.08);
-    float darkness = saturate((dim * 0.58 + dim * vignette * 0.08) * dimBoost);
-    float blackMix = saturate((dim * 0.04 + dim * vignette * 0.035) * dimBoost);
-    float3 color = lerp(scene, float3(luma, luma, luma), desat);
+    float3 gray = float3(luma, luma, luma);
+    float desat = saturate(dim * 0.10);
+    float darkness = saturate(dim * 0.62 * dimBoost);
+    float blackMix = saturate(dim * 0.055 * dimBoost);
+    float3 color = lerp(scene, gray, desat);
     color *= 1.0 - darkness;
-    color = lerp(color, color * float3(0.94, 0.96, 1.0), dim * 0.10);
     color = lerp(color, float3(0.006, 0.007, 0.010), blackMix);
     if (variant > 3.5)
     {
-        float3 redDim = float3(luma * 0.36 + 0.018, luma * 0.060 + 0.003, luma * 0.040 + 0.002);
-        redDim *= 1.0 - vignette * 0.22;
-        color = lerp(color, redDim, saturate(0.72 + dim * 0.20));
+        float3 redDim = color * float3(1.08, 0.44, 0.36) + float3(0.055, 0.006, 0.004) * dim;
+        color = lerp(color, redDim, saturate(dim * 0.72));
     }
     else if (variant > 2.5)
     {
-        float3 purpleDim = float3(luma * 0.28 + 0.018, luma * 0.090 + 0.006, luma * 0.42 + 0.030);
-        purpleDim *= 1.0 - vignette * 0.20;
-        color = lerp(color, purpleDim, saturate(0.70 + dim * 0.20));
+        float3 purpleDim = color * float3(0.76, 0.46, 1.12) + float3(0.028, 0.006, 0.075) * dim;
+        color = lerp(color, purpleDim, saturate(dim * 0.72));
     }
     else if (variant > 1.5)
     {
         float3 inverted = 1.0 - scene;
         float invLuma = MoonSugarLuma(inverted);
-        float3 whiteInverted = lerp(float3(invLuma, invLuma, invLuma), inverted, 0.22);
-        whiteInverted = lerp(whiteInverted, float3(invLuma * 0.72 + 0.08, invLuma * 0.76 + 0.09, invLuma * 0.84 + 0.10), 0.62);
-        whiteInverted *= 0.54 - dim * 0.18;
-        whiteInverted *= 1.0 - vignette * 0.16;
-        color = lerp(color, whiteInverted, saturate(0.76 + dim * 0.16));
+        float3 whiteInverted = lerp(float3(invLuma, invLuma, invLuma), inverted, 0.24);
+        whiteInverted = lerp(whiteInverted, float3(0.78, 0.82, 0.92), 0.30);
+        whiteInverted *= 1.0 - saturate(dim * 0.36);
+        color = lerp(color, whiteInverted, saturate(dim * 0.62));
+    }
+    else
+    {
+        color = lerp(color, color * float3(0.94, 0.96, 1.0), dim * 0.08);
     }
     return float4(saturate(color), 1.0);
 }
