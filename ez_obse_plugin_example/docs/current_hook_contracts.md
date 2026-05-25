@@ -65,7 +65,7 @@ Do not express current decode or implementation completion as a percentage. No c
 
 | Pipeline area | Current status | Remaining gap |
 | --- | --- | --- |
-| Command-driven screen effects | Implemented through explicit OBSE commands and profile-family pixel shader slots. Build 86 registers the commands in the local Daggers opcode ledger at `0x70F0-0x7111`. | Runtime confirmation that each packaged `.pso` slot is loaded and active for representative commands. |
+| Command-driven screen effects | Implemented through explicit OBSE commands and profile-family pixel shader slots. Build 86 registers the commands in the local Daggers opcode ledger at `0x70F0-0x7111`. Build 87 keeps the Dim color-variant commands as public commands but canonicalizes their active renderer profile to `VESDim100` while preserving the Dim variant constant. | Runtime confirmation that each packaged `.pso` slot is loaded and active for representative commands, including the three Dim color variants. |
 | Image-space render path | Implemented for the byte-validated `NiRendererRender_ImageSpaceProcessCall` path. Profile-family `.pso` files are the normal shipped path; `VESDistortion.pso` / embedded bytecode are compatibility fallback only. | Menu, render-to-texture, reset, and unusual render-mode validation. |
 | Depth-backed screen masking | Implemented as a texture-backed depth capture/bind path where supported by the device/format. | It is not a true terrain/object ID mask; formats and runtime availability must be logged per machine. |
 | World/object vertex replacement | Implemented as exact-gated non-skinned and skinned post-setup replacement for decoded visible families. | Runtime matrix for actor, creature, armor, first-person, third-person, and heavy modded scenes. |
@@ -106,7 +106,7 @@ Support-buffer diagnostic correction note: Build 84 aligns runtime readiness str
 
 Fallback fidelity note: `VESHeadWoundPS.pso` and `VESHeatShimmerPS.pso` are the current required Build 80 profile-specific paths for the flicker/normal-preservation shader changes. The combined `VESDistortion.pso` and embedded bytecode remain compatibility fallbacks; they must not be treated as proof that the latest HeadWound/HeatShimmer profile-specific stability patches are active unless regenerated and verified.
 
-Dim variant fidelity note: Build 82 routes `VESDimWhiteInverted`, `VESDimPurple`, and `VESDimDarkRed` through the existing Dim profile-family shader using the profile variant constant. Dim profiles now require the current standalone `VESDimPS.pso`; the combined fallback is not treated as the current implementation path for those variants.
+Dim variant fidelity note: Build 82 routes `VESDimWhiteInverted`, `VESDimPurple`, and `VESDimDarkRed` through the existing Dim profile-family shader using the profile variant constant. Dim profiles now require the current standalone `VESDimPS.pso`; the combined fallback is not treated as the current implementation path for those variants. Build 87 preserves that model by storing the three color variants as `VESDim100` active renderer profile executions with variant constants `2.0`, `3.0`, and `4.0`; the requested command name is retained only for console/log identity.
 
 Blind water-safety correction note: Build 83 removes Blind from the depth-backed path after water disappearance was reported. Blind remains a screen-space image effect, but it no longer requests texture-backed depth capture or samples `DepthSampler`; `VESBlindPS.pso` is the current required Blind path.
 

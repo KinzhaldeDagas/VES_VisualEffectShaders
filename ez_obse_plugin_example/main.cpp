@@ -2668,6 +2668,9 @@ namespace
 		UInt32 lastFormID;
 		float intensity;
 		UInt32 profile;
+		float profileVariant;
+		const char* profileName;
+		const char* profileDisplayName;
 	};
 
 	struct RendererState
@@ -2970,7 +2973,10 @@ namespace
 		0,
 		0,
 		0.0f,
-		kEffectProfile_MoonSugar75
+		kEffectProfile_MoonSugar75,
+		0.0f,
+		nullptr,
+		nullptr
 	};
 
 	RendererState s_rendererState = {};
@@ -3370,6 +3376,24 @@ namespace
 		s_effect.lastFormID = 0;
 		s_effect.intensity = 0.0f;
 		s_effect.profile = kEffectProfile_MoonSugar75;
+		s_effect.profileVariant = 0.0f;
+		s_effect.profileName = nullptr;
+		s_effect.profileDisplayName = nullptr;
+	}
+
+	const char* GetActiveEffectProfileName()
+	{
+		return s_effect.profileName ? s_effect.profileName : GetEffectProfileName(s_effect.profile);
+	}
+
+	const char* GetActiveEffectProfileDisplayName()
+	{
+		return s_effect.profileDisplayName ? s_effect.profileDisplayName : GetEffectProfileDisplayName(s_effect.profile);
+	}
+
+	float GetActiveEffectProfileVariant()
+	{
+		return s_effect.profileVariant;
 	}
 
 	void BuildShaderPaths()
@@ -3867,7 +3891,10 @@ namespace
 		UInt32 profile,
 		UInt32 durationMs,
 		UInt32 maxDurationMs,
-		float intensity)
+		float intensity,
+		float profileVariant = -1.0f,
+		const char* profileName = nullptr,
+		const char* profileDisplayName = nullptr)
 	{
 		UInt32 now = GetTickCount();
 		UInt32 previousRemainingMs = GetRemainingMillisecondsAt(now);
@@ -3885,10 +3912,14 @@ namespace
 		s_effect.lastFormID = form ? form->refID : 0;
 		s_effect.intensity = ClampFloat(intensity, 0.0f, 1.0f);
 		s_effect.profile = profile;
+		s_effect.profileVariant = profileVariant >= 0.0f ? profileVariant : GetEffectProfileVariant(profile);
+		s_effect.profileName = profileName;
+		s_effect.profileDisplayName = profileDisplayName;
 		++s_effect.doseCount;
 
 		_MESSAGE(
-			"VES effect started: profile=%s reason=%s form=%08X name=\"%s\" stack=%u previousRemainingMs=%u remainingMs=%u doses=%u intensity=%.3f",
+			"VES effect started: profile=%s runtimeProfile=%s reason=%s form=%08X name=\"%s\" stack=%u previousRemainingMs=%u remainingMs=%u doses=%u intensity=%.3f variant=%.3f",
+			GetActiveEffectProfileName(),
 			GetEffectProfileName(profile),
 			reason ? reason : "unknown",
 			s_effect.lastFormID,
@@ -3897,10 +3928,11 @@ namespace
 			previousRemainingMs,
 			remainingMs,
 			s_effect.doseCount,
-			s_effect.intensity);
+			s_effect.intensity,
+			s_effect.profileVariant);
 		_MESSAGE(
 			"VES effect pipeline: profile=%s imageSpace=1 depth=%u worldWobble=%u worldScale=%.3f family=%u pixelSlot=%u shaderName=%s embeddedOnly=%u",
-			GetEffectProfileName(profile),
+			GetActiveEffectProfileName(),
 			EffectProfileUsesDepth(profile) ? 1 : 0,
 			EffectProfileUsesWorldWobble(profile) ? 1 : 0,
 			GetEffectProfileWorldWobbleScale(profile),
@@ -3979,16 +4011,25 @@ namespace
 
 	UInt32 StartDimEffect(UInt32 profile)
 	{
+		const bool isColorVariant =
+			profile == kEffectProfile_DimWhiteInverted ||
+			profile == kEffectProfile_DimPurple ||
+			profile == kEffectProfile_DimDarkRed;
+		const UInt32 runtimeProfile = isColorVariant ? kEffectProfile_Dim100 : profile;
+		const float variant = GetEffectProfileVariant(profile);
 		SelectMoonSugarShader(true);
 
 		return StartEffectProfile(
 			nullptr,
 			false,
 			GetEffectProfileName(profile),
-			profile,
+			runtimeProfile,
 			s_settings.durationMs,
 			s_settings.durationMs,
-			1.0f);
+			1.0f,
+			variant,
+			isColorVariant ? GetEffectProfileName(profile) : nullptr,
+			isColorVariant ? GetEffectProfileDisplayName(profile) : nullptr);
 	}
 
 	UInt32 StartOnFireEffect(UInt32 profile)
@@ -4102,7 +4143,7 @@ namespace
 		_MESSAGE(
 			"VES pipeline summary: reason=%s profile=%s pixelSlot=%u profileShaderMask=%02X fallback=%u elapsedMs=%u remainingMs=%u imageSpace=%u frames=%u renderFailures=%u rendererShaderFailures=%u depthCapture=%u/%u/%u depthActive=%u depthFormat=%08X camera=%u/%u restored=%u geom=%u/%u skipScreen=%u skipSkin=%u object=%u/%u skin=%u/%u census=%u lighting=%u parallax=%u skinPass=%u skipInactive=%u skipPass=%u skipScreen=%u objectShaderFailures=%u legacyAppliedMask=%02X sm3AppliedMask=%02X envAppliedMask=%02X texAppliedMask=%02X decalAppliedMask=%02X depthAppliedMask=%02X supportAppliedMask=%08X",
 			reason ? reason : "unknown",
-			GetEffectProfileName(s_effect.profile),
+			GetActiveEffectProfileName(),
 			GetEffectProfilePixelShaderSlot(s_effect.profile),
 			BuildProfilePixelShaderMask(),
 			s_rendererState.fallbackShaderUsed ? 1 : 0,
@@ -5962,7 +6003,7 @@ namespace
 			static_cast<float>(GetEffectProfileShaderFamily(s_effect.profile)),
 			GetEffectProfileSeverity(s_effect.profile),
 			depthSampleEnabled ? 1.0f : 0.0f,
-			GetEffectProfileVariant(s_effect.profile),
+			GetActiveEffectProfileVariant(),
 			viewportU0,
 			viewportV0,
 			viewportU1 - viewportU0,
@@ -9318,7 +9359,7 @@ void __stdcall RenderVESDistortionFrame(NiDX9Renderer* renderer)
 			{
 				_MESSAGE(
 					"ERROR::RenderVESDistortionFrame: active pixel shader unavailable profile=%s slot=%u profileShader=%u fallback=%u failures=%u",
-					GetEffectProfileDisplayName(s_effect.profile),
+					GetActiveEffectProfileDisplayName(),
 					GetEffectProfilePixelShaderSlot(s_effect.profile),
 					ActiveProfilePixelShaderLoaded() ? 1 : 0,
 					s_rendererState.pixelShader ? 1 : 0,
@@ -10019,7 +10060,7 @@ bool Cmd_VESDumpShaderRenderer_Execute(COMMAND_ARGS)
 	Console_Print(
 		"VES renderer: active=%u profile=%s shader=%s remaining=%.2fs doses=%u frames=%u failures=%u shaderFailures=%u lastSkip=%u imageSpace=%u",
 		VES_IsActive() ? 1 : 0,
-		GetEffectProfileName(s_effect.profile),
+		GetActiveEffectProfileName(),
 		s_shaderName,
 		static_cast<double>(remainingMs) / 1000.0,
 		s_effect.doseCount,
@@ -10140,7 +10181,7 @@ bool Cmd_VESDumpShaderRenderer_Execute(COMMAND_ARGS)
 	_MESSAGE(
 		"Renderer dump: active=%u profile=%s shaderName=%s embeddedOnly=%u activePixelSlot=%u profileShaderMask=%02X activeProfileShader=%u remainingMs=%u doses=%u frames=%u failures=%u shaderFailures=%u lastSkip=%u imageSpace=%u mode=%u rtStack=%u shader=%u fallback=%u context=%u geometryHook=%u geometryCalls=%u geometryApplied=%u geometrySkipScreen=%u geometrySkipSkin=%u cameraHook=%u cameraCalls=%u cameraApplied=%u cameraRestored=%u cameraSkipInactive=%u cameraSkipFiltered=%u",
 		VES_IsActive() ? 1 : 0,
-		GetEffectProfileName(s_effect.profile),
+		GetActiveEffectProfileName(),
 		s_shaderName,
 		s_embeddedPixelShaderOnly ? 1 : 0,
 		GetEffectProfilePixelShaderSlot(s_effect.profile),

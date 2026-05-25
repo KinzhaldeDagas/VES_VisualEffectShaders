@@ -16,6 +16,7 @@ The CSV rows follow the OBSE `RegisterCommand` order used by `main.cpp`. The Dim
 
 | Command | Opcode |
 | --- | --- |
+| `VESDimWhiteInverted` | `0x7102` |
 | `VESDimPurple` | `0x7103` |
 | `VESDimDarkRed` | `0x7104` |
 
@@ -23,3 +24,4 @@ The CSV rows follow the OBSE `RegisterCommand` order used by `main.cpp`. The Dim
 
 This is an opcode registration correction only. It does not alter shader bytecode, profile IDs, hook addresses, render-path semantics, or effect behavior.
 
+Later Dim color-variant crash reports mean this opcode correction must not be described as the confirmed crash fix. It remains a valid command-collision risk reduction and the current local Daggers opcode allocation.

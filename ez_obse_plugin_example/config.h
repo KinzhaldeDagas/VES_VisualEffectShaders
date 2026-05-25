@@ -16,7 +16,7 @@
 // Plugin version, Major, Minor, Build. EG: (1.0.0) equals (Major.Minor.Build)
 #define PLUGIN_VERSION_MAJOR		0
 #define PLUGIN_VERSION_MINOR		0
-#define PLUGIN_VERSION_BUILD		59
+#define PLUGIN_VERSION_BUILD		60
 
 // ================================
 // Nothing below this needs changing between plugins except maybe MINIMUM_RUNTIME_VERSION and/or SUPPORTED_RUNTIME_VERSION_STRICT
