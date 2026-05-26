@@ -4307,8 +4307,19 @@ namespace
 			profile == kEffectProfile_DimWhiteInverted ||
 			profile == kEffectProfile_DimPurple ||
 			profile == kEffectProfile_DimDarkRed ||
+			profile == kEffectProfile_OnFire25 ||
+			profile == kEffectProfile_OnFire50 ||
+			profile == kEffectProfile_OnFire75 ||
+			profile == kEffectProfile_OnFire100 ||
 			profile == kEffectProfile_HeatShimmer50 ||
-			profile == kEffectProfile_HeatShimmer100;
+			profile == kEffectProfile_HeatShimmer100 ||
+			profile == kEffectProfile_Rain50 ||
+			profile == kEffectProfile_Rain75 ||
+			profile == kEffectProfile_Rain100 ||
+			profile == kEffectProfile_Frost50 ||
+			profile == kEffectProfile_Frost75 ||
+			profile == kEffectProfile_Frost100 ||
+			profile == kEffectProfile_DepthMaskDebug;
 	}
 
 	IDirect3DPixelShader9* GetActivePixelShader()
